@@ -27,3 +27,83 @@ C:\Program Files\MongoDB\Server\3.6\bin\mongod --dbpath d:\data\db
 * db.集合.remove({查询})：删除指定的数据
 * db.集合.drop() : 删除当前集合
 * db.dropDatabase() : 删除整个数据库
+
+MongoDB的使用方式
+#### 1.基本结构
+例如 ：
+```
+var userName= 'MongoDB';
+var timeStamp = Date.parse(new Date()); // 生成时间戳
+var jsonDataBase = {
+     "loginName": userName,
+    "loginTime": timeStamp
+ };
+
+ var db = connect('log'); // 链接数据库 与use log 方法一样
+
+ db.login.insert(jsonDataBase); //插入数据
+
+ print('[demo]log print success'); // 没有错误显示成功
+```
+当我们创建好数据以后，通过connect()（类似use db）链接到库，
+通过db.集合.insert(xxx)插入数据，通过print来提示（类似console.log）
+#### 2.修改数据
+* $set  修改数据
+```
+var db = connect('co');
+db.login.update({loginTime:'userName'},{'$set':{sex:0}})
+print('修改成功')
+```
+* $unset  删除数据
+```
+var db = connect('com');
+db.login.update({loginTime:'userName'},{'$unset':{sex:0}})
+print('删除成功')
+```
+* $inc  修改数值
+```
+var db = connect('com');
+db.login.update({loginTime:'userName'},{'$inc':{age: +2}})
+print('年龄增加了2')
+```
+* multi 为true时表示全部修改
+```
+var db = connect('com');
+db.login.update({loginTime:'userName'},{'$set':{'book':[]},{multi:true})
+print('当前数据都添加了book这个属性')
+```
+* upsert 如果找不到数据时，插入这条数据（true，添加，false，不添加）
+```
+var db = connect('com');
+db.login.update({loginTime:'xxxxx'},{'$set'{age: 20}},{upsert:true})
+print('没有这条数据就添加上')
+```
+
+#### 3.修改数组的方法
+* $push   追加数组
+```
+var db = connect('com');
+db.login.update({loginTime:'userName'},{'$push':{'book':'draw'})
+print('最后数据为' {book:['draw']})
+```
+* $pop  删除数组的值，1 从末尾，2从前端
+```
+db.login.update({loginTime:'userName'},{'$pop':{'book':1});
+print('最后数据为' {book:[]})
+```
+* $addToSet 有则会修改，没有就添加
+```
+db.login.update({loginTime:'userName'},{'$addToSet':{'book':'MongoDB'});
+print('最后数据为' {book:['MongoDB']})
+```
+* $each     批量添加
+```
+var newBook = ['code','js','css'];
+db.login.update({loginTime:'userName'},{'$addToSet':{insterset:{$each:newBook}}})
+print('输出数据为：book:['code','js','css']')
+```
+* 数组定位修改  通过.int
+```
+db.login.update({loginTime:'userName'},{'$set':{insterset.2:'html'})
+print('输出数据为：book:['code','js','html']')
+```
