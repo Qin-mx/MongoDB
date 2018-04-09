@@ -25,7 +25,13 @@ db.login.update({loginTime:'userName'},{'$set':{sex:0}})
 print('修改成功')
 ```
 * $unset  删除数据
-
+```
+var db = connect('com');
+db.login.update({loginTime:'userName'},{'$unset':{sex:0}})
+print('删除成功')
+```
+* $inc  修改数值
+```
 var db = connect('com');
 db.login.update({loginTime:'userName'},{'$inc':{age: +2}})
 print('年龄增加了2')
